@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #=== Global Vars ===
-DATETIME=`date +%Y%m%d_%H%M%S_%3N`
 DEBUGMODE=1 #0:OFF 1:ON
+DATETIME=`date +%Y%m%d_%H%M%S_%3N`
 
 #=== Main Logic ===
 function main
