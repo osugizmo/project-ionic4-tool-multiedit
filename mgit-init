@@ -1,0 +1,125 @@
+#!/bin/bash
+
+#=== Global Vars ===
+DATETIME=`date +%Y%m%d_%H%M%S_%3N`
+DEBUGMODE=1 #0:OFF 1:ON
+
+#=== Main Logic ===
+function main
+{
+  #------------
+  #Time Stamp
+  ilog "[mgit-init] ${DATETIME}"
+
+  #------------
+  #Set Target User
+  local _TargetUser=""
+  if [ "$1" == "" ]; then
+    elog "invalid argument."
+    exit 1
+  fi
+   _TargetUser=$1
+  dlog "_TargetUser = ${_TargetUser}"
+
+  #------------
+  #Make Repository List
+  #call github API
+  local _GitReposList=`curl -s "https://api.github.com/users/${_TargetUser}/repos?per_page=100" | grep \"clone_url\" | cut -d'"' -f4`
+  if [ "${_GitReposList}" == "" ]; then
+    elog "get repository failed."
+    exit 2
+  fi
+  dlog "_GitReposList = ${_GitReposList}"
+  #create list file
+  local _ReposUrlsFileName='reposlist_url'
+  local _ReposUrlsFile="./${_ReposUrlsFileName}.txt"
+  dlog "_ReposUrlsFileName    = ${_ReposUrlsFileName}"
+  dlog "_ReposUrlsFile        = ${_ReposUrlsFile}"
+  if [ -e ${_ReposUrlsFile} ]; then
+    mv ${_ReposUrlsFile} ${_ReposUrlsFileName}_${DATETIME}.txt
+  fi 
+  touch ${_ReposUrlsFile}
+  for _cloneurl in ${_GitReposList}
+  do
+    dlog "${_cloneurl}"
+    echo ${_cloneurl} >> ${_ReposUrlsFile}
+  done
+  #edit list file
+  #vi ${_ReposUrlsFile}
+  #read list file
+  local _ReposList=`cat ${_ReposUrlsFile}`
+  dlog "_ReposList = ${_ReposList}"
+
+  #------------
+  #Make Repository Name List
+  #call github API
+  local _GitReposNamesList=`curl -s "https://api.github.com/users/${_TargetUser}/repos?per_page=100" | grep \"full_name\" | cut -d'"' -f4 | cut -d'/' -f2`
+  if [ "${_GitReposNamesList}" == "" ]; then
+    elog "get repository name failed."
+    exit 3
+  fi
+  dlog "_GitReposNamesList = ${_GitReposNamesList}"
+  #create list file
+  local _ReposNamesFileName='reposlist_name'
+  local _ReposNamesFile="./${_ReposNamesFileName}.txt"
+  dlog "_ReposNamesFileName   = ${_ReposNamesFileName}"
+  dlog "_ReposNamesFile       = ${_ReposNamesFile}"
+  if [ -e ${_ReposNamesFile} ]; then
+    mv ${_ReposNamesFile} ${_ReposNamesFileName}_${DATETIME}.txt
+  fi 
+  touch ${_ReposNamesFile}
+  for _reponame in ${_GitReposNamesList}
+  do
+    dlog "${_reponame}"
+    echo ${_reponame} >> ${_ReposNamesFile}
+  done
+  #read list file
+  local _ReposNamesList=`cat ${_ReposNamesFile}`
+  dlog "_ReposNamesList = ${_ReposNamesList}"
+  
+  ilog "mgit-init finished."
+  echo -e
+
+}
+
+
+#=== Log Functions ===
+#function recho { echo -e '\e[31m$*\e[m'; } #Linux
+function recho { echo -e $'\e[31m'$*$'\e[m'; } #For Mac
+function gecho { echo -e $'\e[32m'$*$'\e[m'; } #For Mac
+function yecho { echo -e $'\e[33m'$*$'\e[m'; } #For Mac
+function becho { echo -e $'\e[34m'$*$'\e[m'; } #For Mac
+function mecho { echo -e $'\e[35m'$*$'\e[m'; } #For Mac
+function cecho { echo -e $'\e[36m'$*$'\e[m'; } #For Mac
+function log
+{
+  if [ $DEBUGMODE -ne 0 ]; then
+    echo -e $'\e[m[Log] '$*;
+  fi
+}
+function elog
+{
+  if [ $DEBUGMODE -ne 0 ]; then
+    echo -e $'\e[43;31m[Error] '$*$'\e[m';
+    echo -e
+  fi
+}
+function ilog
+{
+  if [ $DEBUGMODE -ne 0 ]; then
+    echo -e $'\e[32m[Info] '$*$'\e[m';
+  fi
+}
+function dlog
+{
+  if [ $DEBUGMODE -ne 0 ]; then
+    echo -e $'\e[33m[Debug] '$*$'\e[m';
+  fi
+}
+
+#=== Entry Point ===
+main $*
+
+#=== Exit Shell ===
+exit 0
+

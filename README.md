@@ -1,2 +1,13 @@
 # project-ionic4-tool-multiedit
-Ionic v4.1.2 Project - multi edit utility -
+
+## Usage:
+
+### mgit-init
+Execute the command
+```
+cd project-ionic4-tool-multiedit
+chmod +x mgit-init
+./mgit-init <github-user-name>
+```
+
+---
