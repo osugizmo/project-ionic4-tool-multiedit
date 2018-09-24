@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #=== Global Vars ===
+DATETIME=`date +%Y%m%d_%H%M%S_%3N`
 DEBUGMODE=1 #0:OFF 1:ON
 
 #=== Main Logic ===
@@ -74,7 +75,7 @@ function main
     echo ${_reponame} >> ${_ReposNamesFile}
   done
   #edit list file
-  #vi ${_ReposNamesFile}}
+  #vi ${_ReposNamesFile}
   #read list file
   local _ReposNamesList=`cat ${_ReposNamesFile}`
   dlog "_ReposNamesList = ${_ReposNamesList}"
