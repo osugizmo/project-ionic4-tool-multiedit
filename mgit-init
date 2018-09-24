@@ -8,7 +8,7 @@ DEBUGMODE=1 #0:OFF 1:ON
 function main
 {
   #------------
-  #Time Stamp
+  #Start Time Stamp
   local srtdatetime=`date +%Y%m%d_%H%M%S_%3N`
   ilog "[mgit-init] start : ${srtdatetime}"
 
@@ -80,6 +80,8 @@ function main
   local _ReposNamesList=`cat ${_ReposNamesFile}`
   dlog "_ReposNamesList = ${_ReposNamesList}"
   
+  #------------
+  #End Time Stamp
   local enddatetime=`date +%Y%m%d_%H%M%S_%3N`
   ilog "[mgit-init] finished : ${enddatetime}"
   echo -e
