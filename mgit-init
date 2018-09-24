@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #=== Global Vars ===
-DATETIME=`date +%Y%m%d_%H%M%S_%3N`
 DEBUGMODE=1 #0:OFF 1:ON
 
 #=== Main Logic ===
@@ -9,7 +8,8 @@ function main
 {
   #------------
   #Time Stamp
-  ilog "[mgit-init] ${DATETIME}"
+  local srtdatetime=`date +%Y%m%d_%H%M%S_%3N`
+  ilog "[mgit-init] start : ${srtdatetime}"
 
   #------------
   #Set Target User
@@ -73,11 +73,14 @@ function main
     dlog "${_reponame}"
     echo ${_reponame} >> ${_ReposNamesFile}
   done
+  #edit list file
+  #vi ${_ReposNamesFile}}
   #read list file
   local _ReposNamesList=`cat ${_ReposNamesFile}`
   dlog "_ReposNamesList = ${_ReposNamesList}"
   
-  ilog "mgit-init finished."
+  local enddatetime=`date +%Y%m%d_%H%M%S_%3N`
+  ilog "[mgit-init] finished : ${enddatetime}"
   echo -e
 
 }
