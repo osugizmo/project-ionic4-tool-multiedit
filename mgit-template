@@ -1,0 +1,110 @@
+#!/bin/bash
+
+#=== Global Vars ===
+DEBUGMODE=1 #0:OFF 1:ON
+
+#=== Main Logic ===
+function main
+{
+  #------------
+  #Time Stamp
+  local srtdatetime=`date +%Y%m%d_%H%M%S_%3N`
+  ilog "[mgit-template] start : ${srtdatetime}"
+
+  #------------
+  #Call Function
+  echoColorCheck
+  
+  #------------
+  #End Time Stamp
+  local enddatetime=`date +%Y%m%d_%H%M%S_%3N`
+  ilog "[mgit-template] finished : ${enddatetime}"
+  echo -e
+
+}
+
+#=== Functions ===
+function echoColorCheck
+{
+  #------------
+  #Time Stamp
+  local srtdatetime=`date +%Y%m%d_%H%M%S_%3N`
+  dlog "[echoColorCheck] start : ${srtdatetime}"
+
+  #------------
+  #Main Process
+  echo "-----------"
+  for i in {30..38}
+  do
+    local _num="${i}m"
+    local _escs=$'\e['
+    local _txt="ABCDEF012345 "
+    local _esce=$'\e[m'
+    echo -e "${_num} - ${_escs}${_num}${_txt}${_esce}"
+  done
+  echo "-----------"
+  for i in {40..48}
+  do
+    local _num="${i};30m"
+    local _escs=$'\e['
+    local _txt="ABCDEF012345 "
+    local _esce=$'\e[m'
+    echo -e "${_num} - ${_escs}${_num}${_txt}${_esce}"
+  done
+  echo "-----------"
+  for i in {0..8}
+  do
+    local _num="${i};47;30m"
+    local _escs=$'\e['
+    local _txt="ABCDEF012345 "
+    local _esce=$'\e[m'
+    echo -e "${_num} - ${_escs}${_num}${_txt}${_esce}"
+  done
+  echo "-----------"
+
+  #------------
+  #End Time Stamp
+  local enddatetime=`date +%Y%m%d_%H%M%S_%3N`
+  dlog "[echoColorCheck] finished : ${enddatetime}"
+  echo -e
+}
+
+#=== LogFunctions ===
+#function recho { echo -e '\e[31m$*\e[m'; } #Linux
+function recho { echo -e $'\e[31m'$*$'\e[m'; } #For Mac
+function gecho { echo -e $'\e[32m'$*$'\e[m'; } #For Mac
+function yecho { echo -e $'\e[33m'$*$'\e[m'; } #For Mac
+function becho { echo -e $'\e[34m'$*$'\e[m'; } #For Mac
+function mecho { echo -e $'\e[35m'$*$'\e[m'; } #For Mac
+function cecho { echo -e $'\e[36m'$*$'\e[m'; } #For Mac
+function log
+{
+  if [ $DEBUGMODE -ne 0 ]; then
+    echo -e $'\e[m[Log] '$*;
+  fi
+}
+function elog
+{
+  if [ $DEBUGMODE -ne 0 ]; then
+    echo -e $'\e[43;31m[Error] '$*$'\e[m';
+    echo -e
+  fi
+}
+function ilog
+{
+  if [ $DEBUGMODE -ne 0 ]; then
+    echo -e $'\e[32m[Info] '$*$'\e[m';
+  fi
+}
+function dlog
+{
+  if [ $DEBUGMODE -ne 0 ]; then
+    echo -e $'\e[33m[Debug] '$*$'\e[m';
+  fi
+}
+
+#=== Entry Point ===
+main $*
+
+#=== Exit Shell ===
+exit 0
