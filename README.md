@@ -11,3 +11,15 @@ chmod +x mgit-init
 ```
 
 ---
+
+### mgit-clone
+Please execute the mgit-init first and make a repositry list.
+
+Next, Execute the command
+```
+cd project-ionic4-tool-multiedit
+chmod +x mgit-clone
+./mgit-clone
+```
+
+---
